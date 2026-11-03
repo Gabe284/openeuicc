@@ -49,8 +49,15 @@ jobs:
 
       - name: Install Android SDK and NDK
         run: |
-          yes | sdkmanager --licenses >/dev/null
-          sdkmanager --install \
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager was not found under $ANDROID_HOME/cmdline-tools"
+            find "$ANDROID_HOME" -maxdepth 4 -type f -name sdkmanager -print
+            exit 1
+          fi
+          echo "Using SDK manager: $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null
+          "$SDKMANAGER" --install \
             "platform-tools" \
             "platforms;android-37" \
             "build-tools;36.0.0" \

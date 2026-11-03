@@ -67,7 +67,7 @@ jobs:
       - name: Build privileged APK and Magisk module
         run: |
           chmod +x ./gradlew
-          ./gradlew --no-daemon --stacktrace \
+          ./gradlew --no-daemon --build-cache --stacktrace \
             :app:assembleDebug \
             :app:assembleDebugMagiskModule
 
